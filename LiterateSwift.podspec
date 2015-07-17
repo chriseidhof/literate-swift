@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/chriseidhof/literate-swift.git", :tag => "0.0.1" }
 
-  s.source_files  = "CommonMark/*.swift", "CommonMark/CommonMark.h"
+  s.source_files  = "LiterateSwift/*.swift", "LiterateSwift/LiterateSwift.h"
 
   s.dependency 'CommonMark', '0.0.2'
 end
