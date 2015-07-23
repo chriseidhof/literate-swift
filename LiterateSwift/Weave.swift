@@ -23,7 +23,7 @@ extension SequenceType {
 private let nameRegex = try! NSRegularExpression(pattern: "^<<(\\w+)>>$", options: NSRegularExpressionOptions())
 
 func matchName(string: String) -> String? {
-    let matches = nameRegex.matchesInString(string, options: NSMatchingOptions(), range: NSMakeRange(0, string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let matches = nameRegex.matchesInString(string, options: NSMatchingOptions(), range: NSMakeRange(0, (string as NSString).length))
     guard matches.count == 1 else { return nil }
     return (string as NSString).substringWithRange(matches[0].rangeAtIndex(1))
 }
