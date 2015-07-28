@@ -28,10 +28,16 @@ func matchName(string: String) -> String? {
     return (string as NSString).substringWithRange(matches[0].rangeAtIndex(1))
 }
 
-public func replaceSnippet(directory: String)(child: Block) -> [Block] {
+public enum WeaveError: ErrorType {
+    case CouldNotFindSnippet(name: String)
+}
+
+public func replaceSnippet(directory: String)(child: Block) throws -> [Block] {
     if case let .CodeBlock(code, language) = child where language == "highlight-swift",
         let name = matchName(code) {
-            let code = findSnippet(directory)(name: name) ?? "<<ERROR couldn't find \(name)>>"
+            guard let code = findSnippet(directory)(name: name) else {
+              throw WeaveError.CouldNotFindSnippet(name: name)
+            }
             return [Block.CodeBlock(text: code, language: language)]
     } else {
         return [child]
