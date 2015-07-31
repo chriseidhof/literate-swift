@@ -9,18 +9,8 @@
 import Foundation
 import CommonMark
 
-extension SequenceType {
-    func takeWhile(f: Generator.Element -> Bool) -> [Generator.Element] {
-        var result: [Generator.Element] = []
-        for element in self {
-            guard f(element) else { break }
-            result.append(element)
-        }
-        return result
-    }
-}
 
-private let nameRegex = try! NSRegularExpression(pattern: "^<<(\\w+)>>$", options: NSRegularExpressionOptions())
+private let nameRegex = /"^<<(\\w+)>>$"
 
 func matchName(string: String) -> String? {
     let matches = nameRegex.matchesInString(string, options: NSMatchingOptions(), range: NSMakeRange(0, (string as NSString).length))
@@ -56,8 +46,10 @@ func findNestedFiles(directory: String, test: String -> Bool) -> [String] {
 func extractSnippet(filename: String, snippetName: String) -> String? {
     let contents: String = try! NSString(contentsOfFile: filename, encoding: NSUTF8StringEncoding) as String
     var result: [String]?
+    let regex = /"^\\s*//\\s+<<\(snippetName)>>"
+    let closeRegex = /"^\\s*//\\s+<</\(snippetName)>>"
     for line in contents.lines {
-        if line.hasPrefix("// <</\(snippetName)>>") {
+        if line =~ regex {
             guard let lines = result else { return "" }
             let snippetIndentation = lines.map { $0.characters.takeWhile { $0 == " " }.count}.reduce(Int.max, combine: min)
             var index = lines[0].startIndex
@@ -66,7 +58,7 @@ func extractSnippet(filename: String, snippetName: String) -> String? {
             return "\n".join(indented)
         } else if result != nil {
             result?.append(line)
-        } else if line.hasPrefix("// <<\(snippetName)>>") {
+        } else if line =~ closeRegex {
             result = []
         }
     }

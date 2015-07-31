@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1F60D2AE0D4CE1C54A12CEE9 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF207830ED941D57708719C /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		830981EB1B6B68F000B969CD /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830981EA1B6B68F000B969CD /* Library.swift */; };
 		837EF5691B592771000F5E7F /* LiterateSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 837EF5681B592771000F5E7F /* LiterateSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		837EF5701B592771000F5E7F /* LiterateSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837EF5651B592771000F5E7F /* LiterateSwift.framework */; };
 		837EF5751B592771000F5E7F /* LiterateSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837EF5741B592771000F5E7F /* LiterateSwiftTests.swift */; };
@@ -29,6 +30,7 @@
 /* Begin PBXFileReference section */
 		014F118BE4EEAED894D3E0F9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		394E7A81D486DD4B3CD9D957 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		830981EA1B6B68F000B969CD /* Library.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		837EF5651B592771000F5E7F /* LiterateSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiterateSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		837EF5681B592771000F5E7F /* LiterateSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiterateSwift.h; sourceTree = "<group>"; };
 		837EF56A1B592771000F5E7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				837EF5811B5929D8000F5E7F /* Evaluation.swift */,
 				837EF5681B592771000F5E7F /* LiterateSwift.h */,
 				837EF56A1B592771000F5E7F /* Info.plist */,
+				830981EA1B6B68F000B969CD /* Library.swift */,
 			);
 			path = LiterateSwift;
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837EF5841B5929D8000F5E7F /* Evaluation.swift in Sources */,
+				830981EB1B6B68F000B969CD /* Library.swift in Sources */,
 				837EF5831B5929D8000F5E7F /* Weave.swift in Sources */,
 				837EF5821B5929D8000F5E7F /* LiterateSwift.swift in Sources */,
 			);
