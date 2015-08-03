@@ -9,7 +9,7 @@
 import Foundation
 import CommonMark
 
-func processMarkdownOrStdIn(process: [Block] -> ()) {
+public func processMarkdownOrStdIn(process: [Block] -> ()) {
     guard Process.arguments.count == 2 else {
         fatalError("Need a single argument: a .md file to be processed")
     }
