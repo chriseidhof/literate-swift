@@ -15,6 +15,7 @@
 		837EF5821B5929D8000F5E7F /* LiterateSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837EF57F1B5929D8000F5E7F /* LiterateSwift.swift */; };
 		837EF5831B5929D8000F5E7F /* Weave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837EF5801B5929D8000F5E7F /* Weave.swift */; };
 		837EF5841B5929D8000F5E7F /* Evaluation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837EF5811B5929D8000F5E7F /* Evaluation.swift */; };
+		83A206651B6F5EE200DEECE6 /* CLI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A206641B6F5EE200DEECE6 /* CLI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		837EF57F1B5929D8000F5E7F /* LiterateSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiterateSwift.swift; sourceTree = "<group>"; };
 		837EF5801B5929D8000F5E7F /* Weave.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weave.swift; sourceTree = "<group>"; };
 		837EF5811B5929D8000F5E7F /* Evaluation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Evaluation.swift; sourceTree = "<group>"; };
+		83A206641B6F5EE200DEECE6 /* CLI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLI.swift; sourceTree = "<group>"; };
 		9BF207830ED941D57708719C /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -101,6 +103,7 @@
 				837EF5681B592771000F5E7F /* LiterateSwift.h */,
 				837EF56A1B592771000F5E7F /* Info.plist */,
 				830981EA1B6B68F000B969CD /* Library.swift */,
+				83A206641B6F5EE200DEECE6 /* CLI.swift */,
 			);
 			path = LiterateSwift;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 			files = (
 				837EF5841B5929D8000F5E7F /* Evaluation.swift in Sources */,
 				830981EB1B6B68F000B969CD /* Library.swift in Sources */,
+				83A206651B6F5EE200DEECE6 /* CLI.swift in Sources */,
 				837EF5831B5929D8000F5E7F /* Weave.swift in Sources */,
 				837EF5821B5929D8000F5E7F /* LiterateSwift.swift in Sources */,
 			);
