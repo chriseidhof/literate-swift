@@ -59,9 +59,9 @@ func evaluateSwift(code: String, expression: String) -> String {
         contents = "\n".join([code, "", "\n".join(expressionLines)])
     }
 
-    let base = NSUUID().UUIDString
+    let base = NSUUID().UUIDString as NSString
     let basename = base.stringByAppendingPathExtension("swift")
-    let filename = "/tmp".stringByAppendingPathComponent(basename!)
+    let filename = ("/tmp" as NSString).stringByAppendingPathComponent(basename!)
 
     contents.writeToFile(filename)
     let arguments: [String] =  "--sdk macosx swiftc".words

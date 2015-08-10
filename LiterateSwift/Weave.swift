@@ -66,9 +66,9 @@ func extractSnippet(filename: String, snippetName: String) -> String? {
 }
 
 func findSnippet(directory: String)(name: String) -> String? {
-    let files = findNestedFiles(directory) { $0.pathExtension == "swift" }
+    let files = findNestedFiles(directory) { ($0 as NSString).pathExtension == "swift" }
     for swiftFile in files  {
-        if let snippet = extractSnippet(directory.stringByAppendingPathComponent(swiftFile), snippetName: name) {
+        if let snippet = extractSnippet((directory as NSString).stringByAppendingPathComponent(swiftFile), snippetName: name) {
             return snippet
         }
     }
