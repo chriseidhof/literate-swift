@@ -55,7 +55,7 @@ func extractSnippet(filename: String, snippetName: String) -> String? {
             var index = lines[0].startIndex
             for _ in 0..<snippetIndentation { index = index.successor() }
             let indented: [String] = lines.map { $0.substringFromIndex(index) }
-            return "\n".join(indented)
+            return indented.joinWithSeparator("\n")
         } else if result != nil {
             result?.append(line)
         } else if line =~ regex {// start

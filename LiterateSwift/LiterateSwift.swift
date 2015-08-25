@@ -49,14 +49,14 @@ public func printableSwiftBlocks(child: Block) -> [String] {
 
 public func evaluateAndReplacePrintSwift(document: [Block]) -> [Block] {
     let isPrintSwift = { codeBlock($0, { $0 == "print-swift" }) }
-    let swiftCode = "\n".join(deepCollect(document, extractSwift)).stringByReplacingOccurrencesOfString("print(", withString: "noop_print(")
-    let prelude = "\n".join([
+    let swiftCode = deepCollect(document, extractSwift).joinWithSeparator("\n").stringByReplacingOccurrencesOfString("print(", withString: "noop_print(")
+    let prelude = [
         "func noop_print<T, TargetStream : OutputStreamType>(value: T, inout _ target: TargetStream, appendNewline: Bool) { }",
         "func noop_print<T, TargetStream : OutputStreamType>(value: T, inout _ target: TargetStream) { }",
         "func noop_print<T>(value: T, appendNewline: Bool) { }",
         "func noop_print<T>(value: T) { }",
         ""
-    ])
+    ].joinWithSeparator("\n")
     let eval: Block -> [Block] = {
         if let code = isPrintSwift($0) {
             return [

@@ -48,15 +48,15 @@ func evaluateSwift(code: String, expression: String) -> String {
     let contents: String
     if !hasPrintlnStatements {
         if expressionLines.count == 0 {
-            contents = "\n".join([code, "", "ERROR"])
+            contents = [code, "", "ERROR"].joinWithSeparator("\n")
         } else {
             let lastLine = expressionLines.removeLast()
             let shouldIncludeLet = expressionLines.filter { $0.hasPrefix("let result___ ") }.count == 0
             let resultIs = shouldIncludeLet ? "let result___ : Any = " : ""
-            contents = "\n".join([code, "", "\n".join(expressionLines), "", "\(resultIs) \(lastLine)", "print(\"\\(result___)\")"])
+            contents = [code, "", expressionLines.joinWithSeparator("\n"), "", "\(resultIs) \(lastLine)", "print(\"\\(result___)\")"].joinWithSeparator("\n")
         }
     } else {
-        contents = "\n".join([code, "", "\n".join(expressionLines)])
+        contents = [code, "", expressionLines.joinWithSeparator("\n")].joinWithSeparator("\n")
     }
 
     let base = NSUUID().UUIDString as NSString
