@@ -47,7 +47,30 @@ public func printableSwiftBlocks(child: Block) -> [String] {
     return toArray(codeBlock(child, { $0 == "print-swift" } ))
 }
 
-public func evaluateAndReplacePrintSwift(document: [Block]) -> [Block] {
+extension String {
+    var trimmed: String {
+        return stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    }
+}
+
+extension Array {
+    var decompose: (Element, [Element])? {
+        guard let x = self.first else { return nil }
+        return (x, Array(self[self.startIndex.successor()..<self.endIndex]))
+    }
+}
+
+let isEmbedPrintSwift: Block -> (String,String)? = { codeBlock($0, { $0 == "embed-print-swift"}).flatMap { str in
+    var lines = str.componentsSeparatedByString("\n")
+    guard let (firstLine, rest) = lines.decompose else { return nil }
+    let firstLineComps = firstLine.componentsSeparatedByString(":")
+    guard firstLineComps.count == 2 else { return nil }
+    return (firstLineComps[1].trimmed, rest.joinWithSeparator("\n"))
+    }
+}
+
+
+public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NSURL) -> [Block] {
     let isPrintSwift = { codeBlock($0, { $0 == "print-swift" }) }
     let swiftCode = deepCollect(document, extractSwift).joinWithSeparator("\n").stringByReplacingOccurrencesOfString("print(", withString: "noop_print(")
     let prelude = [
@@ -56,12 +79,19 @@ public func evaluateAndReplacePrintSwift(document: [Block]) -> [Block] {
         "func noop_print<T>(value: T, appendNewline: Bool) { }",
         "func noop_print<T>(value: T) { }",
         ""
-    ].joinWithSeparator("\n")
+        ].joinWithSeparator("\n")
     let eval: Block -> [Block] = {
         if let code = isPrintSwift($0) {
             return [
                 Block.CodeBlock(text: code, language: "swift"),
                 Block.CodeBlock(text: evaluateSwift(prelude + swiftCode, expression: code), language: "")
+            ]
+        } else if let (filename, code) = isEmbedPrintSwift($0) {
+            let url = workingDirectory.URLByAppendingPathComponent(filename)
+            let fileCode = try! String(contentsOfURL: url)
+            return [
+                Block.CodeBlock(text: code, language: "swift"),
+                Block.CodeBlock(text: evaluateSwift(fileCode, expression: code), language: "")
             ]
         } else {
             return [$0]
