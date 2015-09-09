@@ -60,12 +60,13 @@ extension Array {
     }
 }
 
-let isEmbedPrintSwift: Block -> (String,String)? = { codeBlock($0, { $0 == "embed-print-swift"}).flatMap { str in
-    var lines = str.componentsSeparatedByString("\n")
-    guard let (firstLine, rest) = lines.decompose else { return nil }
-    let firstLineComps = firstLine.componentsSeparatedByString(":")
-    guard firstLineComps.count == 2 else { return nil }
-    return (firstLineComps[1].trimmed, rest.joinWithSeparator("\n"))
+public func isEmbedPrintSwift(block: Block) -> (String,String)? {
+    return codeBlock(block, { $0 == "embed-print-swift"}).flatMap { str in
+        let lines = str.componentsSeparatedByString("\n")
+        guard let (firstLine, rest) = lines.decompose else { return nil }
+        let firstLineComps = firstLine.componentsSeparatedByString(":")
+        guard firstLineComps.count == 2 else { return nil }
+        return (firstLineComps[1].trimmed, rest.joinWithSeparator("\n"))
     }
 }
 
