@@ -70,6 +70,12 @@ public func isEmbedPrintSwift(block: Block) -> (String,String)? {
     }
 }
 
+extension String {
+    func filterLines(include: String -> Bool) -> String {
+        return lines.filter(include).joinWithSeparator("\n")
+    }
+}
+
 
 public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NSURL) -> [Block] {
     let isPrintSwift = { codeBlock($0, { $0 == "print-swift" }) }
@@ -83,8 +89,9 @@ public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NS
         ].joinWithSeparator("\n")
     let eval: Block -> [Block] = {
         if let code = isPrintSwift($0) {
+            let filtered = code.filterLines { !isResultLine($0) }
             return [
-                Block.CodeBlock(text: code, language: "swift"),
+                Block.CodeBlock(text: filtered, language: "swift"),
                 Block.CodeBlock(text: evaluateSwift(prelude + swiftCode, expression: code), language: "")
             ]
         } else if let (filename, code) = isEmbedPrintSwift($0) {
