@@ -112,6 +112,13 @@ public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NS
             return [$0]
         }
     }
+    let hasPrintSwiftStatements = deepFilter({ (block: Block) in
+        isPrintSwift(block) != nil || isEmbedPrintSwift(block) != nil
+    })(elements: document).count > 0
+    guard hasPrintSwiftStatements else {
+        evaluateSwift(swiftCode, expression: "()")
+        return document
+    }
     return deepApply(document, eval)
 }
 
