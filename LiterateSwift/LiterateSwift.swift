@@ -97,8 +97,9 @@ public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NS
         } else if let (filename, code) = isEmbedPrintSwift($0) {
             let url = workingDirectory.URLByAppendingPathComponent(filename)
             let fileCode = try! String(contentsOfURL: url)
+            let filtered = code.filterLines { !isResultLine($0) }
             return [
-                Block.CodeBlock(text: code, language: "swift"),
+                Block.CodeBlock(text: filtered, language: "swift"),
                 Block.CodeBlock(text: evaluateSwift(fileCode, expression: code), language: "")
             ]
         } else {
