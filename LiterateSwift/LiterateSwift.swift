@@ -116,7 +116,7 @@ public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NS
         isPrintSwift(block) != nil || isEmbedPrintSwift(block) != nil
     })(elements: document).count > 0
     guard hasPrintSwiftStatements else {
-        evaluateSwift(swiftCode, expression: "()")
+        evaluateSwift(prelude + swiftCode, expression: "()")
         return document
     }
     return deepApply(document, eval)
