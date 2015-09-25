@@ -74,10 +74,24 @@ extension String {
     func filterLines(include: String -> Bool) -> String {
         return lines.filter(include).joinWithSeparator("\n")
     }
+
+    var withoutResult: String {
+        return filterLines { !isResultLine($0) }
+    }
 }
 
+func resultBlocks(printableCode: String, prelude: String, expression: String, merge: Bool) -> [Block] {
+    let part1 = printableCode.withoutResult
+    let part2 = evaluateSwift(prelude, expression: expression)
+    return merge ? [
+        Block.CodeBlock(text: part1 + "\n" + part2, language: "swift")
+    ] : [
+        Block.CodeBlock(text: part1, language: "swift"),
+        Block.CodeBlock(text: part2, language: "")
+    ]
+}
 
-public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NSURL) -> [Block] {
+public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NSURL, mergeCodeBlocks: Bool = false) -> [Block] {
     let isPrintSwift = { codeBlock($0, { $0 == "print-swift" }) }
     let swiftCode = deepCollect(document, extractSwift).joinWithSeparator("\n").stringByReplacingOccurrencesOfString("print(", withString: "noop_print(")
     let prelude = [
@@ -89,19 +103,11 @@ public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NS
         ].joinWithSeparator("\n")
     let eval: Block -> [Block] = {
         if let code = isPrintSwift($0) {
-            let filtered = code.filterLines { !isResultLine($0) }
-            return [
-                Block.CodeBlock(text: filtered, language: "swift"),
-                Block.CodeBlock(text: evaluateSwift(prelude + swiftCode, expression: code), language: "")
-            ]
+            return resultBlocks(code, prelude: prelude+swiftCode, expression: code, merge: mergeCodeBlocks)
         } else if let (filename, code) = isEmbedPrintSwift($0) {
             let url = workingDirectory.URLByAppendingPathComponent(filename)
             let fileCode = try! String(contentsOfURL: url)
-            let filtered = code.filterLines { !isResultLine($0) }
-            return [
-                Block.CodeBlock(text: filtered, language: "swift"),
-                Block.CodeBlock(text: evaluateSwift(fileCode, expression: code), language: "")
-            ]
+            return resultBlocks(code, prelude: fileCode, expression: code, merge: mergeCodeBlocks)
         } else {
             return [$0]
         }
