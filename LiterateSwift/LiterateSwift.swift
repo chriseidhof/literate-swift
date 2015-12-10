@@ -94,7 +94,7 @@ func resultBlocks(printableCode: String, prelude: String, expression: String, me
 public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NSURL, mergeCodeBlocks: Bool = false) -> [Block] {
     let isPrintSwift = { codeBlock($0, { $0 == "print-swift" }) }
     let swiftCode = deepCollect(document, extractSwift).joinWithSeparator("\n")
-//        .stringByReplacingOccurrencesOfString("print(", withString: "noop_print(")
+        .stringByReplacingOccurrencesOfString("\nprint(", withString: "\nnoop_print(")
     let prelude = [
         "func noop_print<T, TargetStream : OutputStreamType>(value: T, inout _ target: TargetStream, appendNewline: Bool) { }",
         "func noop_print<T, TargetStream : OutputStreamType>(value: T, inout _ target: TargetStream) { }",
