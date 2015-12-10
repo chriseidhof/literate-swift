@@ -42,6 +42,10 @@ private func printstderr(s: String) {
     NSFileHandle.fileHandleWithStandardError().writeData(s.dataUsingEncoding(NSUTF8StringEncoding)!)
 }
 
+func isResultLine(x: String) -> Bool {
+    return x.hasPrefix("let result___ ")
+}
+
 func evaluateSwift(code: String, expression: String) -> String {
     let hasPrintlnStatements = !(expression.rangeOfString("print", options: NSStringCompareOptions(), range: nil, locale: nil) == nil)
     var expressionLines: [String] = expression.lines.filter { $0.characters.count > 0 }
@@ -51,7 +55,7 @@ func evaluateSwift(code: String, expression: String) -> String {
             contents = [code, "", "ERROR"].joinWithSeparator("\n")
         } else {
             let lastLine = expressionLines.removeLast()
-            let shouldIncludeLet = expressionLines.filter { $0.hasPrefix("let result___ ") }.count == 0
+            let shouldIncludeLet = expressionLines.filter(isResultLine).count == 0
             let resultIs = shouldIncludeLet ? "let result___ : Any = " : ""
             contents = [code, "", expressionLines.joinWithSeparator("\n"), "", "\(resultIs) \(lastLine)", "print(\"\\(result___)\")"].joinWithSeparator("\n")
         }

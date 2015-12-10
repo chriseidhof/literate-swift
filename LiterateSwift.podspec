@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "LiterateSwift"
-  s.version      = "0.0.12"
+  s.version      = "0.0.14"
   s.summary      = "Literate Swift is a framework for doing literate programming in Swift"
 
   s.description  = <<-DESC
@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
 
   s.platform = :osx, "10.9"
 
-  s.source       = { :git => "https://github.com/chriseidhof/literate-swift.git", :tag => "0.0.12" }
+  s.source       = { :git => "https://github.com/chriseidhof/literate-swift.git", :tag => "0.0.14" }
 
   s.source_files  = "LiterateSwift/*.swift", "LiterateSwift/LiterateSwift.h"
 
