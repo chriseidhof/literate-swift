@@ -73,7 +73,8 @@ public func isEmbedPrintSwift(block: Block) -> (String,String)? {
 
 public func evaluateAndReplacePrintSwift(document: [Block], workingDirectory: NSURL) -> [Block] {
     let isPrintSwift = { codeBlock($0, { $0 == "print-swift" }) }
-    let swiftCode = deepCollect(document, extractSwift).joinWithSeparator("\n").stringByReplacingOccurrencesOfString("print(", withString: "noop_print(")
+    let swiftCode = deepCollect(document, extractSwift).joinWithSeparator("\n")
+//        .stringByReplacingOccurrencesOfString("print(", withString: "noop_print(")
     let prelude = [
         "func noop_print<T, TargetStream : OutputStreamType>(value: T, inout _ target: TargetStream, appendNewline: Bool) { }",
         "func noop_print<T, TargetStream : OutputStreamType>(value: T, inout _ target: TargetStream) { }",
