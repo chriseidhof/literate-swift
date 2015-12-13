@@ -75,5 +75,33 @@ func evaluateSwift(code: String, expression: String) -> String {
     let workingDirectory = NSFileManager.defaultManager().currentDirectoryPath
     let (stdout, stderr) = exec(commandPath: "/tmp/app", workingDirectory: workingDirectory, arguments: [workingDirectory])
     printstderr(stderr)
-    return stdout
+    return stdout.wrap(70)
 }
+
+extension String {
+    func wrap(length: Int) -> String {
+        let wrapChars: [Character] = [" ", ","]
+        var wrapped: [String] = []
+        var start = startIndex
+        var end = start
+        while end < endIndex {
+            while end < endIndex && start.distanceTo(end) < length {
+                end = end.advancedBy(1)
+            }
+            if end != endIndex {
+                var retractedEnd = end
+                while start.distanceTo(retractedEnd) > 0 && !wrapChars.contains(self[retractedEnd.advancedBy(-1)]) {
+                    retractedEnd = retractedEnd.advancedBy(-1)
+                }
+                if !self[start..<retractedEnd].trimmed.isEmpty {
+                    end = retractedEnd
+                }
+            }
+            let l = String(self[start..<end]).trimmed
+            wrapped.append(l)
+            start = end
+        }
+        return wrapped.joinWithSeparator("\n")
+    }
+}
+

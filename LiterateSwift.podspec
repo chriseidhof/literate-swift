@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "LiterateSwift"
-  s.version      = "0.0.19"
+  s.version      = "0.0.20"
   s.summary      = "Literate Swift is a framework for doing literate programming in Swift"
 
   s.description  = <<-DESC
