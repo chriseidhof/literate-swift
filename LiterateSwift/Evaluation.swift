@@ -42,6 +42,10 @@ private func printstderr(s: String) {
     NSFileHandle.fileHandleWithStandardError().writeData(s.dataUsingEncoding(NSUTF8StringEncoding)!)
 }
 
+func isResultLine(x: String) -> Bool {
+    return x.hasPrefix("let result___ ")
+}
+
 func evaluateSwift(code: String, expression: String) -> String {
     let hasPrintlnStatements = !(expression.rangeOfString("print", options: NSStringCompareOptions(), range: nil, locale: nil) == nil)
     var expressionLines: [String] = expression.lines.filter { $0.characters.count > 0 }
@@ -51,7 +55,7 @@ func evaluateSwift(code: String, expression: String) -> String {
             contents = [code, "", "ERROR"].joinWithSeparator("\n")
         } else {
             let lastLine = expressionLines.removeLast()
-            let shouldIncludeLet = expressionLines.filter { $0.hasPrefix("let result___ ") }.count == 0
+            let shouldIncludeLet = expressionLines.filter(isResultLine).count == 0
             let resultIs = shouldIncludeLet ? "let result___ : Any = " : ""
             contents = [code, "", expressionLines.joinWithSeparator("\n"), "", "\(resultIs) \(lastLine)", "print(\"\\(result___)\")"].joinWithSeparator("\n")
         }
@@ -71,5 +75,33 @@ func evaluateSwift(code: String, expression: String) -> String {
     let workingDirectory = NSFileManager.defaultManager().currentDirectoryPath
     let (stdout, stderr) = exec(commandPath: "/tmp/app", workingDirectory: workingDirectory, arguments: [workingDirectory])
     printstderr(stderr)
-    return stdout
+    return stdout.wrap(70)
 }
+
+extension String {
+    func wrap(length: Int) -> String {
+        let wrapChars: [Character] = [" ", ","]
+        var wrapped: [String] = []
+        var start = startIndex
+        var end = start
+        while end < endIndex {
+            while end < endIndex && start.distanceTo(end) < length {
+                end = end.advancedBy(1)
+            }
+            if end != endIndex {
+                var retractedEnd = end
+                while start.distanceTo(retractedEnd) > 0 && !wrapChars.contains(self[retractedEnd.advancedBy(-1)]) {
+                    retractedEnd = retractedEnd.advancedBy(-1)
+                }
+                if !self[start..<retractedEnd].trimmed.isEmpty {
+                    end = retractedEnd
+                }
+            }
+            let l = String(self[start..<end]).trimmed
+            wrapped.append(l)
+            start = end
+        }
+        return wrapped.joinWithSeparator("\n")
+    }
+}
+
