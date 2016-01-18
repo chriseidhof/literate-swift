@@ -1,0 +1,13 @@
+PODS:
+  - cmark (0.21.0)
+  - CommonMark (0.0.8):
+    - cmark (= 0.21)
+
+DEPENDENCIES:
+  - CommonMark (>= 0.0.3)
+
+SPEC CHECKSUMS:
+  cmark: 0868ab0d93af82a0f3f4b69a313b5d2089af51c3
+  CommonMark: 41534cca70f552845ad3d0221c56d9d5fd7121e8
+
+COCOAPODS: 0.38.2
