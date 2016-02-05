@@ -31,7 +31,11 @@ private func exec(commandPath commandPath: String, workingDirectory: String, arg
 
     task.waitUntilExit()
 
-    guard task.terminationStatus == 0 else { fatalError("Task failed \(workingDirectory, commandPath, arguments)") }
+    guard task.terminationStatus == 0 else {
+        printstderr("Task failed \(workingDirectory, commandPath, arguments)")
+        printstderr(stderroutput)
+        exit(task.terminationStatus)
+    }
 
 
     return (output: stdoutoutput, stderr: stderroutput)
