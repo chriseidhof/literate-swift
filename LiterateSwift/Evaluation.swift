@@ -13,7 +13,7 @@ private func exec(commandPath commandPath: String, workingDirectory: String, arg
     task.currentDirectoryPath = workingDirectory
     task.launchPath = commandPath
     task.arguments = arguments
-    task.environment = ["PATH": "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"]
+    task.environment = NSProcessInfo.processInfo().environment
 
     let stdout = NSPipe()
     task.standardOutput = stdout
@@ -30,6 +30,9 @@ private func exec(commandPath commandPath: String, workingDirectory: String, arg
     let stderroutput : String = read(stderr)
 
     task.waitUntilExit()
+
+    guard task.terminationStatus == 0 else { fatalError("Task failed \(workingDirectory, commandPath, arguments)") }
+
 
     return (output: stdoutoutput, stderr: stderroutput)
 }
@@ -68,10 +71,15 @@ func evaluateSwift(code: String, expression: String) -> String {
     let filename = ("/tmp" as NSString).stringByAppendingPathComponent(basename!)
 
     contents.writeToFile(filename)
-    let arguments: [String] =  "--sdk macosx swiftc".words
+    var command = "/usr/bin/xcrun"
+    var arguments: [String] =  "--sdk macosx swiftc".words
+    if let swiftC = NSProcessInfo.processInfo().environment["SWIFTC"] {
+        command = swiftC.words[0]
+        arguments = Array(swiftC.words.dropFirst())
+    }
     let objectName = base.stringByAppendingPathExtension("o")!
-    ignoreOutputAndPrintStdErr(exec(commandPath:"/usr/bin/xcrun", workingDirectory:"/tmp", arguments:arguments + ["-c", filename]))
-    ignoreOutputAndPrintStdErr(exec(commandPath: "/usr/bin/xcrun", workingDirectory: "/tmp", arguments: arguments + ["-o", "app", objectName]))
+    ignoreOutputAndPrintStdErr(exec(commandPath:command, workingDirectory:"/tmp", arguments:arguments + ["-c", filename]))
+    ignoreOutputAndPrintStdErr(exec(commandPath: command, workingDirectory: "/tmp", arguments: arguments + ["-o", "app", objectName]))
     let workingDirectory = NSFileManager.defaultManager().currentDirectoryPath
     let (stdout, stderr) = exec(commandPath: "/tmp/app", workingDirectory: workingDirectory, arguments: [workingDirectory])
     printstderr(stderr)
